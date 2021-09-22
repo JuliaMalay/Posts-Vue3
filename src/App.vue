@@ -1,30 +1,40 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+  <div>
+    <div class="post" v-for="post in posts">
+      <div><strong>Название:</strong></div>
+      <div><strong>Описание:</strong></div>
+    </div>
   </div>
-  <router-view/>
 </template>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+.post {
+  padding: 15px;
+  border: 2px solid rgba(255, 203, 33, 0.747);
+  margin-top: 10px;
 }
 </style>
+<script>
+export default {
+  data() {
+    return {
+      posts: [
+        {id: 1, title: 'JS1', body: 'JavaScript1'},
+        {id: 2, title: 'JS2', body: 'JavaScript2'},
+        {id: 3, title: 'JS3', body: 'JavaScript3'},
+        {
+          id: 4,
+          title: 'Пост о булочке синнабон',
+          body: 'Синнабон-булочка с корицей',
+        },
+      ],
+    };
+  },
+  methods: {},
+};
+</script>
