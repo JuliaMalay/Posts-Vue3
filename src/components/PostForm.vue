@@ -1,19 +1,9 @@
 <template>
   <form @submit.prevent>
     <h4>Создание поста</h4>
-    <input
-      v-model="post.title"
-      class="input"
-      type="text"
-      placeholder="Название поста"
-    />
-    <input
-      v-model="post.body"
-      class="input"
-      type="text"
-      placeholder="Описание поста"
-    />
-    <button class="button" @click="createPost">Создать пост</button>
+    <my-input v-model="post.title" placeholder="Название поста" />
+    <my-input v-model="post.body" placeholder="Описание поста" />
+    <my-button class="btn" @click="createPost">Создать пост</my-button>
   </form></template
 >
 
@@ -30,32 +20,27 @@ export default {
   methods: {
     createPost() {
       this.post.id = Date.now();
-      this.$emit('create', this.post);
-      this.post = {
-        title: '',
-        body: '',
-      };
+      if (this.post.title && this.post.body) {
+        this.$emit('create', this.post);
+        this.post = {
+          title: '',
+          body: '',
+        };
+      } else {
+        alert('Заполните поля!');
+      }
     },
   },
 };
 </script>
 
 <style>
-.input {
-  border: 1px solid coral;
-  width: 100%;
-  padding: 10px;
-  margin: 5px;
-}
 form {
   display: flex;
   flex-direction: column;
 }
-.button {
-  border: 2px solid coral;
-  padding: 10px;
-  background-color: transparent;
-  margin-top: 10px;
+.btn {
   align-self: flex-end;
+  margin-top: 10px;
 }
 </style>

@@ -1,8 +1,14 @@
 <template>
-  <div>
+  <div v-if="posts.length > 0">
     <h3>Список постов</h3>
-    <post-item v-for="post in posts" v-bind:key="post.id" :post="post" />
+    <post-item
+      v-for="post in posts"
+      :key="post.id"
+      :post="post"
+      @remove="$emit('remove', post)"
+    />
   </div>
+  <h2 v-else class="nopost">Список постов пуст</h2>
 </template>
 
 <script>
@@ -20,4 +26,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.nopost {
+  color: red;
+  text-align: center;
+}
+</style>

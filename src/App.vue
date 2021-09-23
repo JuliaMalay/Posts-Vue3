@@ -1,7 +1,15 @@
 <template>
-  <div>
-    <post-form @create="createPost" />
-    <post-list :posts="posts" />
+  <div class="app">
+    <h1>
+      Страница с постами
+    </h1>
+    <my-button @click="showDialog" style="margin: 15px 0"
+      >Создать пост</my-button
+    >
+    <my-dialog v-model:show="dialogVisible">
+      <post-form @create="createPost"
+    /></my-dialog>
+    <post-list :posts="posts" @remove="removePost" />
   </div>
 </template>
 
@@ -26,11 +34,19 @@ export default {
           body: 'Синнабон-булочка с корицей',
         },
       ],
+      dialogVisible: false,
     };
   },
   methods: {
     createPost(post) {
       this.posts.push(post);
+      this.dialogVisible = false;
+    },
+    removePost(post) {
+      this.posts = this.posts.filter((p) => p.id !== post.id);
+    },
+    showDialog() {
+      this.dialogVisible = true;
     },
   },
 };
@@ -41,5 +57,8 @@ export default {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+}
+.app {
+  padding: 10px;
 }
 </style>

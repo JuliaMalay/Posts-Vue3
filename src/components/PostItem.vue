@@ -5,7 +5,7 @@
       <div><strong>Описание:</strong>{{ post.body }}</div>
     </div>
     <div class="post__btns">
-      <button>Удалить</button>
+      <my-button @click="$emit('remove', post)">Удалить</my-button>
     </div>
   </div>
 </template>
@@ -24,7 +24,7 @@ export default {
 <style>
 .post {
   padding: 15px;
-  border: 2px solid #218c50a1;
+  border: 2px solid #4169e1;
   margin-top: 10px;
   display: flex;
   align-items: center;
