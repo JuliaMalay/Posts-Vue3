@@ -1,26 +1,19 @@
 <template>
   <div>
-    <div class="post" v-for="post in posts">
-      <div><strong>Название:</strong></div>
-      <div><strong>Описание:</strong></div>
-    </div>
+    <post-form @create="createPost" />
+    <post-list :posts="posts" />
   </div>
 </template>
 
-<style>
-* {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-}
-.post {
-  padding: 15px;
-  border: 2px solid rgba(255, 203, 33, 0.747);
-  margin-top: 10px;
-}
-</style>
 <script>
+import PostForm from '@/components/PostForm';
+import PostList from '@/components/PostList';
+
 export default {
+  components: {
+    PostList,
+    PostForm,
+  },
   data() {
     return {
       posts: [
@@ -35,6 +28,18 @@ export default {
       ],
     };
   },
-  methods: {},
+  methods: {
+    createPost(post) {
+      this.posts.push(post);
+    },
+  },
 };
 </script>
+
+<style>
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+</style>
