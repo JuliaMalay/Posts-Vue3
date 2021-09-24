@@ -3,19 +3,22 @@
     <h1>
       Страница с постами
     </h1>
-    <my-button @click="showDialog" style="margin: 15px 0"
-      >Создать пост</my-button
-    >
+    <div class="app__btns">
+      <my-button @click="showDialog">Создать пост</my-button>
+      <my-select v-model="selectedSort" :options="sortOptions"></my-select>
+    </div>
     <my-dialog v-model:show="dialogVisible">
       <post-form @create="createPost"
     /></my-dialog>
-    <post-list :posts="posts" @remove="removePost" />
+    <post-list :posts="posts" @remove="removePost" v-if="!isPostsLoading" />
+    <div v-else>Идет загрузка...</div>
   </div>
 </template>
 
 <script>
 import PostForm from '@/components/PostForm';
 import PostList from '@/components/PostList';
+import axios from 'axios';
 
 export default {
   components: {
@@ -24,17 +27,14 @@ export default {
   },
   data() {
     return {
-      posts: [
-        {id: 1, title: 'JS1', body: 'JavaScript1'},
-        {id: 2, title: 'JS2', body: 'JavaScript2'},
-        {id: 3, title: 'JS3', body: 'JavaScript3'},
-        {
-          id: 4,
-          title: 'Пост о булочке синнабон',
-          body: 'Синнабон-булочка с корицей',
-        },
-      ],
+      posts: [],
       dialogVisible: false,
+      isPostsLoading: false,
+      selectedSort: '',
+      sortOptions: [
+        {value: 'title', name: 'По названию'},
+        {value: 'body', name: 'По описанию'},
+      ],
     };
   },
   methods: {
@@ -48,6 +48,22 @@ export default {
     showDialog() {
       this.dialogVisible = true;
     },
+    async fetchPosts() {
+      try {
+        this.isPostsLoading = true;
+        const response = await axios.get(
+          'https://jsonplaceholder.typicode.com/posts?_limit=10'
+        );
+        this.posts = response.data;
+      } catch (e) {
+        alert('ошибка!');
+      } finally {
+        this.isPostsLoading = false;
+      }
+    },
+  },
+  mounted() {
+    this.fetchPosts();
   },
 };
 </script>
@@ -58,7 +74,15 @@ export default {
   margin: 0;
   box-sizing: border-box;
 }
+:focus {
+  outline: none;
+}
 .app {
   padding: 10px;
+}
+.app__btns {
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0;
 }
 </style>
