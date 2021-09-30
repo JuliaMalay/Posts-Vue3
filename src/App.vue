@@ -3,6 +3,7 @@
     <h1>
       Страница с постами
     </h1>
+    <my-input v-model="searchQuery" placeholder="Поиск..."></my-input>
     <div class="app__btns">
       <my-button @click="showDialog">Создать пост</my-button>
       <my-select v-model="selectedSort" :options="sortOptions"></my-select>
@@ -11,7 +12,7 @@
       <post-form @create="createPost"
     /></my-dialog>
     <post-list
-      :posts="sortedPosts"
+      :posts="sortedAndSearchedPosts"
       @remove="removePost"
       v-if="!isPostsLoading"
     />
@@ -32,9 +33,12 @@ export default {
   data() {
     return {
       posts: [],
+      page: 1,
+      limit: 10,
       dialogVisible: false,
       isPostsLoading: false,
       selectedSort: '',
+      searchQuery: '',
       sortOptions: [
         {value: 'title', name: 'По названию'},
         {value: 'body', name: 'По описанию'},
@@ -56,7 +60,13 @@ export default {
       try {
         this.isPostsLoading = true;
         const response = await axios.get(
-          'https://jsonplaceholder.typicode.com/posts?_limit=10'
+          'https://jsonplaceholder.typicode.com/posts',
+          {
+            params: {
+              _page: this.page,
+              _limit: this.limit,
+            },
+          }
         );
         this.posts = response.data;
       } catch (e) {
@@ -73,6 +83,17 @@ export default {
     sortedPosts() {
       return [...this.posts].sort((post1, post2) =>
         post1[this.selectedSort]?.localeCompare(post2[this.selectedSort])
+      );
+    },
+    sortedAndSearchedPosts() {
+      return this.sortedPosts.filter(
+        (post) => {
+          return (
+            post.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+            post.body.toLowerCase().includes(this.searchQuery.toLowerCase())
+          );
+        }
+        // post.title.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
     },
   },
